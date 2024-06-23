@@ -18,3 +18,5 @@ plugins {
 
 rootProject.name = 'DSL-Script-Interpreter'
 include('app', 'list', 'utilities')
+include 'Parser-01'
+

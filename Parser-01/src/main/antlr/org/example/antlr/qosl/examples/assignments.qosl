@@ -1,0 +1,62 @@
+/*
+Qosl Assignments
+*/
+package assignments;
+
+let product_01: "Product 01"
+
+let simple_yn: {
+  QT "Are you ready?"
+  S "Yes"
+  S "No"
+}
+
+let simple_ref: {
+  QT """
+  Please enter the Respondent Reference Id.
+  """
+  C int64 "Ref"
+}
+
+let hello: {
+  QT """
+    %4n
+    Welcome to this script.
+    %4n
+    """
+  S "Continue"
+}
+
+let goodbye: {
+  QT """
+    %4n
+    Exit from this script.
+    %4n
+    """
+  S "Continue"
+}
+
+let my_var_01 : 50
+
+let any_label_01 : {
+  QT """
+    Please "mark" all brands seen.
+    """
+  M {
+    product_01,
+    "Product 02",
+    product_03: "Some other product"
+  }
+  S "All of the above"
+  S "None of these"
+  S Default "Don't know/ Mo Answer"
+}
+
+on_entry hello
+on_exit goodbye
+
+if simple_yn(1) {
+  perform simple_ref
+}
+perform any_label_01
+
