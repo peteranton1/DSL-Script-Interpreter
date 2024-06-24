@@ -3,9 +3,9 @@
 
 parser grammar Qosl01Parser;
 
-@header{
-package org.example.antlr.qosl;
-}
+//@header{
+//package org.example.antlr.qosl;
+//}
 
 options {
     tokenVocab = Qosl01Lexer;
@@ -18,10 +18,29 @@ start_
     ;
 
 compilationUnit
-    : LET typeIdentifier COLON literal ;
+    : statements ;
+
+statements: (statement SEMI?)* ;
+
+statement
+    : assignmentStmt
+    ;
+
+assignmentStmt
+    : LET typeIdentifier COLON expression
+    ;
 
 typeIdentifier
     : Identifier
+    ;
+
+typeLiteral
+    : literal
+    ;
+
+expression
+    : typeLiteral
+    | typeIdentifier
     ;
 
 literal
@@ -30,6 +49,7 @@ literal
     | BooleanLiteral
     | StringLiteral
     | TextBlock
+    | NullLiteral
     ;
 
 

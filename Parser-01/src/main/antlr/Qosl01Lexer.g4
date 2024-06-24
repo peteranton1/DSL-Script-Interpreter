@@ -4,9 +4,9 @@
 
 lexer grammar Qosl01Lexer;
 
-@header{
-package org.example.antlr.qosl;
-}
+//@header{
+//package org.example.antlr.qosl;
+//}
 // LEXER
 
 CHARACTER  : 'c'|'C'|'character'|'CHARACTER';
@@ -90,7 +90,17 @@ fragment StringCharacters: StringCharacter+;
 
 fragment StringCharacter: ~["\\\r\n] | EscapeSequence;
 
-TextBlock: '"""' [ \t]* [\n\r] [.\r\b]* '"""';
+TextBlock:
+    '"""' [\r\n] MultiCharacters? '"""';
+
+fragment MultiCharacters: MultiCharacter+;
+
+fragment MultiCharacter: ~["\\] | EscapeSequence ;
+
+
+// §3.10.7 The Null Literal
+
+NullLiteral: 'null';
 
 // §3.10.1 Integer Literals
 

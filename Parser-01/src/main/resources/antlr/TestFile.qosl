@@ -1,0 +1,24 @@
+/*
+Test File for checking Qosl grammar.
+*/
+
+let a01: 5;
+let a02a1: "Hello"
+let a02a2: "Hel\"lo"
+let a02b: """
+Hello""";
+let a02c: """
+    Hello
+    """;
+let a02d: """
+    Hello \"There\"
+    """;
+let a03: 2.11;
+
+/*let q1 : {
+  qt """
+  Here is multiline
+  string that has embedded "text".
+  """
+}*/
+
