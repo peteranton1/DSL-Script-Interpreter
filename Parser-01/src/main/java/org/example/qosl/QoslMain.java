@@ -41,6 +41,6 @@ public class QoslMain {
     // create a parser that feeds off the tokens buffer
     Qosl01Parser parser = new Qosl01Parser(tokens);
 
-    return new ParseResult(parser, parser.compilationUnit()); // begin parsing at init rule
+    return new ParseResult(parser, parser.compUnit()); // begin parsing at init rule
   }
 }

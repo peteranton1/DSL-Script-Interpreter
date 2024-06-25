@@ -3,10 +3,6 @@
 
 parser grammar Qosl01Parser;
 
-//@header{
-//package org.example.antlr.qosl;
-//}
-
 options {
     tokenVocab = Qosl01Lexer;
 }
@@ -14,42 +10,152 @@ options {
 //=============
 
 start_
-    : compilationUnit EOF
+    : compUnit EOF
     ;
 
-compilationUnit
-    : statements ;
+compUnit
+    : stmts ;
 
-statements: (statement SEMI?)* ;
+stmts: (stmt SEMI?)* ;
 
-statement
-    : assignmentStmt
+stmt
+    : assignStmt
+    | kwdStmt
+    | ifBlock
+    | whileBlock
     ;
 
-assignmentStmt
-    : LET typeIdentifier COLON expression
+assignStmt
+    : LET typeId assignOp exprOrBlock
     ;
 
-typeIdentifier
+kwdStmt
+    : kwdMain kwdSub* (typeId assignOp)? exprOrBlock
+    ;
+
+kwdMain
+    : CHARACTER  // 'c'|'C'|'character'|'CHARACTER';
+    | MULTIPLE   // 'm'|'M'|'multiple'|'MULTIPLE';
+    | ON_ENTRY   // 'on_entry'|'ON_ENTRY';
+    | ON_EXIT    // 'on_exit'|'ON_EXIT';
+    | PACKAGE    // 'package'|'PACKAGE';
+    | PERFORM    // 'perform'|'PERFORM';
+    | QTEXT      // 'qt'|'QT'|'qtext'|'QTEXT';
+    | SINGLE     // 's'|'S'|'single'|'SINGLE';
+    ;
+
+kwdSub
+    : DECIMAL    // 'decimal'|'DECIMAL';
+    | DEFAULT    // 'default'|'DEFAULT';
+    | FLOAT64    // 'float'|'float64';
+    | INT64      // 'int'|'int64';
+    ;
+
+whileBlock
+    : WHILE condition block
+    ;
+
+ifBlock
+    : IF condition block
+      elseifBlock*
+      elseBlock?
+    ;
+
+elseifBlock
+    : ELSEIF condition block
+    ;
+
+elseBlock
+    : ELSE block
+    ;
+
+condition
+    : expr
+    ;
+
+assignOp
+    : COLON    // ':';
+    | ASSIGN   // '=';
+    ;
+
+typeId
     : Identifier
     ;
 
-typeLiteral
-    : literal
-    ;
-
-expression
-    : typeLiteral
-    | typeIdentifier
-    ;
-
-literal
+typeLit
     : IntegerLiteral
     | FloatingPointLiteral
     | BooleanLiteral
     | StringLiteral
     | TextBlock
     | NullLiteral
+    ;
+
+exprOrBlock
+    : expr
+    | block
+    ;
+
+block
+    : LBRACE stmts RBRACE
+    ;
+
+expr
+    : unaryExp
+    | parenExpr
+    | logicalExpr
+    | typeValue
+    ;
+
+typeValue
+    : typeLit
+    | typeId
+    ;
+
+parenExpr
+    : LPAREN expr RPAREN
+    ;
+
+unaryExp
+    : unaryOp expr
+    ;
+
+unaryOp
+    : BANG     // '!';
+    | SUB      // '-';
+    ;
+
+logicalExpr
+    : sumExpr (logicalOp sumExpr)*
+    ;
+
+sumExpr
+    : productExpr (sumOp productExpr)*
+    ;
+
+productExpr
+    : typeValue (productOp typeValue)*
+    ;
+
+logicalOp
+    : GT       // '>';
+    | LT       // '<';
+    | EQUAL    // '==';
+    | LE       // '<=';
+    | GE       // '>=';
+    | NOTEQUAL // '!=';
+    | AND      // '&&';
+    | OR       // '||';
+    ;
+
+sumOp
+    : ADD      // '+';
+    | SUB      // '-';
+    ;
+
+productOp
+    : MUL      // '*';
+    | DIV      // '/';
     ;
 
 

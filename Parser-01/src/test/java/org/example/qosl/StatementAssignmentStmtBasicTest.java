@@ -28,31 +28,26 @@ class StatementAssignmentStmtBasicTest extends QoslMainBaseCase {
   }
 
   private static Stream<Arguments> sourceOfTests() {
-    final String template = "(compilationUnit " +
-      "(statements (statement (assignmentStmt let " +
-      "(typeIdentifier variableA) : %s" ;
+    final String templatePre = "(compUnit (stmts (stmt (assignStmt let " +
+      "(typeId variableA) (assignOp :) (exprOrBlock (expr (logicalExpr " +
+      "(sumExpr (productExpr (typeValue %s))))))))))" ;
+    final String templateLit = String.format(templatePre, "(typeLit %s)");
+    final String templateId = String.format(templatePre, "(typeId %s)");
     return Stream.of(
       Arguments.of("let variableA : \"banana\"",
-        String.format(template,
-          "(expression (typeLiteral (literal \"banana\")))))))")),
+        String.format(templateLit,"\"banana\"")),
       Arguments.of("let variableA : \"\"\"\nbanana\"\"\"",
-        String.format(template,
-          "(expression (typeLiteral (literal \"\"\"\\nbanana\"\"\")))))))")),
+        String.format(templateLit,"\"\"\"\\nbanana\"\"\"")),
       Arguments.of("let variableA : 555",
-        String.format(template,
-          "(expression (typeLiteral (literal 555)))))))")),
+        String.format(templateLit,"555")),
       Arguments.of("let variableA : 5.55",
-        String.format(template,
-          "(expression (typeLiteral (literal 5.55)))))))")),
+        String.format(templateLit,"5.55")),
       Arguments.of("let variableA : 0xCAFEbabe",
-        String.format(template,
-          "(expression (typeLiteral (literal 0xCAFEbabe)))))))")),
-      Arguments.of("let variableA : 111   ;",
-        String.format(template,
-          "(expression (typeLiteral (literal 111))))) ;))")),
+        String.format(templateLit,"0xCAFEbabe")),
+      Arguments.of("let variableA : true",
+        String.format(templateLit,"true")),
       Arguments.of("let variableA : variableB",
-        String.format(template,
-          "(expression (typeIdentifier variableB))))))"))
+        String.format(templateId,"variableB"))
     );
   }
 }

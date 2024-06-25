@@ -26,10 +26,10 @@ class ParseInputStreamTest extends QoslMainBaseCase {
     Assertions.assertNotNull(result.parser());
     Assertions.assertNotNull(result.tree());
 
-    String expectedTree = "(compilationUnit " +
-      "(statements (statement (assignmentStmt let " +
-      "(typeIdentifier variableA) : " +
-      "(expression (typeLiteral (literal \"banana\")))))))";
+    String expectedTree = "(compUnit (stmts (stmt (assignStmt let " +
+      "(typeId variableA) (assignOp :) (exprOrBlock (expr " +
+      "(logicalExpr (sumExpr (productExpr " +
+      "(typeValue (typeLit \"banana\")))))))))))";
     String actualTree = result.tree().toStringTree(result.parser());
 
     Assertions.assertEquals(expectedTree, actualTree);
