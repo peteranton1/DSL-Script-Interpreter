@@ -3,6 +3,7 @@ package org.example.qosl;
 import org.example.util.StringUtil;
 import org.junit.jupiter.api.Assertions;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 class QoslMainBaseCase {
@@ -15,6 +16,13 @@ class QoslMainBaseCase {
 
   InputStream toInputStream(String inputString) {
     return new StringUtil().toInputStream(inputString);
+  }
+
+  void basicTest(String input, String expected) throws IOException {
+    InputStream inputStream = toInputStream(input);
+    ParseResult result = underTest.parseInputStream(inputStream);
+
+    assertTree(result, expected);
   }
 
   void assertTree(ParseResult result, String expected) {

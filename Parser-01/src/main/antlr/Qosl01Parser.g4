@@ -26,7 +26,7 @@ stmt
     ;
 
 assignStmt
-    : LET typeId assignOp exprOrBlock
+    : typeId assignOp exprOrBlock
     ;
 
 kwdStmt

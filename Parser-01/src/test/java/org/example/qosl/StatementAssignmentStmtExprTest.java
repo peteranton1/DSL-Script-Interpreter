@@ -6,10 +6,88 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.stream.Stream;
 
 class StatementAssignmentStmtExprTest extends QoslMainBaseCase {
+
+  private static Stream<Arguments> sourceOfExprs() {
+    final String templatePre = "(compUnit (stmts " +
+      "(stmt (assignStmt (typeId varA) " +
+      "(assignOp =) (exprOrBlock (expr " +
+      "%s" +
+      "))))))";
+    final String operand_4 = "(typeLit 4)";
+    final String operand_2 = "(typeLit 2)";
+    final String operand_a = "(typeId a)";
+    final String operand_b = "(typeId b)";
+    final String templateLogical = String.format(templatePre,
+      "(logicalExpr " +
+        "(sumExpr (productExpr (typeValue %s))) " +
+        "(logicalOp %s) " +
+        "(sumExpr (productExpr (typeValue %s))))");
+    final String templateSum = String.format(templatePre,
+      "(logicalExpr (sumExpr " +
+        "(productExpr (typeValue %s)) " +
+        "(sumOp %s) " +
+        "(productExpr (typeValue %s))" +
+        "))");
+    final String templateProduct = String.format(templatePre,
+      "(logicalExpr (sumExpr (productExpr " +
+        "(typeValue %s) " +
+        "(productOp %s) " +
+        "(typeValue %s)" +
+        ")))");
+    return Stream.of(
+      Arguments.of("varA = 4 > 2",
+        String.format(templateLogical, operand_4, ">", operand_2)),
+      Arguments.of("varA = 4 < 2",
+        String.format(templateLogical, operand_4, "<", operand_2)),
+      Arguments.of("varA = 4 == 2",
+        String.format(templateLogical, operand_4, "==", operand_2)),
+      Arguments.of("varA = 4<=2",
+        String.format(templateLogical, operand_4, "<=", operand_2)),
+      Arguments.of("varA = 4>=2",
+        String.format(templateLogical, operand_4, ">=", operand_2)),
+      Arguments.of("varA = 4!=2",
+        String.format(templateLogical, operand_4, "!=", operand_2)),
+      Arguments.of("varA = 4 && 2",
+        String.format(templateLogical, operand_4, "&&", operand_2)),
+      Arguments.of("varA = 4 || 2",
+        String.format(templateLogical, operand_4, "||", operand_2)),
+      Arguments.of("varA = 4+2",
+        String.format(templateSum, operand_4, "+", operand_2)),
+      Arguments.of("varA = 4-2",
+        String.format(templateSum, operand_4, "-", operand_2)),
+      Arguments.of("varA = 4*2",
+        String.format(templateProduct, operand_4, "*", operand_2)),
+      Arguments.of("varA = 4/2",
+        String.format(templateProduct, operand_4, "/", operand_2)),
+      Arguments.of("varA = a > b",
+        String.format(templateLogical, operand_a, ">", operand_b)),
+      Arguments.of("varA = a < b",
+        String.format(templateLogical, operand_a, "<", operand_b)),
+      Arguments.of("varA = a == b",
+        String.format(templateLogical, operand_a, "==", operand_b)),
+      Arguments.of("varA = a <= b",
+        String.format(templateLogical, operand_a, "<=", operand_b)),
+      Arguments.of("varA = a >= b",
+        String.format(templateLogical, operand_a, ">=", operand_b)),
+      Arguments.of("varA = a != b",
+        String.format(templateLogical, operand_a, "!=", operand_b)),
+      Arguments.of("varA = a && b",
+        String.format(templateLogical, operand_a, "&&", operand_b)),
+      Arguments.of("varA = a || b",
+        String.format(templateLogical, operand_a, "||", operand_b)),
+      Arguments.of("varA = a + b",
+        String.format(templateSum, operand_a, "+", operand_b)),
+      Arguments.of("varA = a - b",
+        String.format(templateSum, operand_a, "-", operand_b)),
+      Arguments.of("varA = a * b",
+        String.format(templateProduct, operand_a, "*", operand_b)),
+      Arguments.of("varA = a / b",
+        String.format(templateProduct, operand_a, "/", operand_b))
+    );
+  }
 
   @BeforeEach
   void setUp() {
@@ -17,35 +95,11 @@ class StatementAssignmentStmtExprTest extends QoslMainBaseCase {
   }
 
   @ParameterizedTest
-  @MethodSource("sourceOfTests")
-  void assignmentStmtWithSingleLiteral
+  @MethodSource("sourceOfExprs")
+  void assignmentStmtWithExprOps
     (String input, String expected) throws IOException {
 
-    InputStream inputStream = toInputStream(input);
-    ParseResult result = underTest.parseInputStream(inputStream);
-
-    assertTree(result, expected);
+    basicTest(input, expected);
   }
 
-  private static Stream<Arguments> sourceOfTests() {
-    final String templatePre = "(compUnit (stmts (stmt (assignStmt let " +
-      "(typeId varA) (assignOp =) (exprOrBlock (expr (logicalExpr " +
-      "%s)))))))" ;
-    final String templateLitSum = String.format(templatePre,
-      "(sumExpr (productExpr (typeValue (typeLit 4))) " +
-        "(sumOp %s) (productExpr (typeValue (typeLit 2))))");
-    final String templateLitProd = String.format(templatePre,
-      "(sumExpr (productExpr (typeValue (typeLit 4)) " +
-        "(productOp %s) (typeValue (typeLit 2))))");
-    return Stream.of(
-      Arguments.of("let varA = 4+2",
-        String.format(templateLitSum,"+")),
-      Arguments.of("let varA = 4-2",
-        String.format(templateLitSum,"-")),
-      Arguments.of("let varA = 4*2",
-        String.format(templateLitProd,"*")),
-      Arguments.of("let varA = 4/2",
-        String.format(templateLitProd,"/"))
-    );
-  }
 }

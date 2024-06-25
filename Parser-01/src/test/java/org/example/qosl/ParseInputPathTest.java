@@ -24,10 +24,10 @@ class ParseInputPathTest extends QoslMainBaseCase {
     Assertions.assertNotNull(result.parser());
     Assertions.assertNotNull(result.tree());
 
-    String expectedTree = "(compUnit (stmts (stmt (assignStmt let " +
+    String expectedTree = "(compUnit (stmts (stmt (assignStmt " +
       "(typeId variableA) (assignOp :) (exprOrBlock (expr " +
-      "(logicalExpr (sumExpr (productExpr " +
-      "(typeValue (typeLit \"banana\")))))))))))";
+      "(logicalExpr (sumExpr (productExpr (typeValue " +
+      "(typeLit \"banana\")))))))))))";
     String actualTree = result.tree().toStringTree(result.parser());
 
     Assertions.assertEquals(expectedTree, actualTree);

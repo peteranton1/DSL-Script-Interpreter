@@ -17,7 +17,7 @@ class ParseInputStreamTest extends QoslMainBaseCase {
   @Test
   void parseInputStreamWhenStreamExists() throws IOException {
 
-    String input = "let variableA : \"banana\"";
+    String input = " variableA : \"banana\"";
 
     InputStream inputStream = toInputStream(input);
     ParseResult result = underTest.parseInputStream(inputStream);
@@ -26,10 +26,10 @@ class ParseInputStreamTest extends QoslMainBaseCase {
     Assertions.assertNotNull(result.parser());
     Assertions.assertNotNull(result.tree());
 
-    String expectedTree = "(compUnit (stmts (stmt (assignStmt let " +
+    String expectedTree = "(compUnit (stmts (stmt (assignStmt " +
       "(typeId variableA) (assignOp :) (exprOrBlock (expr " +
-      "(logicalExpr (sumExpr (productExpr " +
-      "(typeValue (typeLit \"banana\")))))))))))";
+      "(logicalExpr (sumExpr (productExpr (typeValue " +
+      "(typeLit \"banana\")))))))))))";
     String actualTree = result.tree().toStringTree(result.parser());
 
     Assertions.assertEquals(expectedTree, actualTree);
