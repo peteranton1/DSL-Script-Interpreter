@@ -79,7 +79,7 @@ assignOp
     ;
 
 typeId
-    : Identifier
+    : Identifier parenExpr?
     ;
 
 typeLit

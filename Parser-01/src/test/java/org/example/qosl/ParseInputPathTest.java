@@ -18,7 +18,7 @@ class ParseInputPathTest extends QoslMainBaseCase {
 
     String inputPath = "QoslMain/parseInputPathWhenFileExists.qosl";
 
-    ParseResult result = underTest.parseInputPath(inputPath);
+    ParseResult result = underTest.parseInputPath(inputPath).parseResult();
 
     Assertions.assertNotNull(result);
     Assertions.assertNotNull(result.parser());

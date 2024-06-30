@@ -20,7 +20,7 @@ class ParseInputStreamTest extends QoslMainBaseCase {
     String input = " variableA : \"banana\"";
 
     InputStream inputStream = toInputStream(input);
-    ParseResult result = underTest.parseInputStream(inputStream);
+    ParseResult result = underTest.parseInputStream(inputStream).parseResult();
 
     Assertions.assertNotNull(result);
     Assertions.assertNotNull(result.parser());

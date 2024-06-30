@@ -2,8 +2,8 @@
 Test File for checking Qosl grammar.
 */
 
-q1block : {
-    if !q1(q1dk) {
+q1block :: {
+    if &&q1(q1dk) {
         q1 : {
           qt """
           Here is multiline
