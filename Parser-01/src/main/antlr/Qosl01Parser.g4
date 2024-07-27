@@ -19,18 +19,23 @@ compUnit
 stmts: (stmt SEMI?)* ;
 
 stmt
-    : assignStmt
+    : assignExpr? block
+    ;
+
+block
+    : LBRACE stmts RBRACE
     | kwdStmt
     | ifBlock
     | whileBlock
+    | expr
     ;
 
-assignStmt
-    : typeId assignOp exprOrBlock
+assignExpr
+    : typeId assignOp
     ;
 
 kwdStmt
-    : kwdMain kwdSub* (typeId assignOp)? exprOrBlock
+    : kwdMain kwdSub* block
     ;
 
 kwdMain
@@ -89,15 +94,6 @@ typeLit
     | StringLiteral
     | TextBlock
     | NullLiteral
-    ;
-
-exprOrBlock
-    : expr
-    | block
-    ;
-
-block
-    : LBRACE stmts RBRACE
     ;
 
 expr

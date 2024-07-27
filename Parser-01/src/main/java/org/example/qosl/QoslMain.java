@@ -24,22 +24,32 @@ public class QoslMain {
     System.out.println("Resource: " + path);
     ParseResult parseResult = compResult.parseResult();
     System.out.println(TreeFormatter.toStringTree(
-        parseResult.tree(),
-        parseResult.parser()));
-    String line = "************************";
+      parseResult.tree(),
+      parseResult.parser()));
+    String line = "*".repeat(20);
     List<ParseError> parseErrors = compResult.parseErrors();
-    if (parseErrors.isEmpty()) {
+    var errors = parseErrors.stream()
+      .map(
+        err -> {
+          boolean isErr = ParseStage.syntax.equals(err.stage());
+          String msg = err.e()
+            + ", " + err.msg()
+            + ", line: " + err.line()
+            + ", char: " + err.charPositionInLine();
+          String level = (isErr ? "[ERROR]" : "[WARN]");
+          System.out.println(level + " " + msg);
+          return isErr;
+        })
+      .filter(x -> x)
+      .toList();
+
+    println(String.format("Found %d/%d errors",
+      errors.size(), parseErrors.size()));
+
+    if (errors.isEmpty()) {
       println(line + "\nCompilation Successful\n" + line);
     } else {
       println(line + "\nCompilation Failed\n" + line);
-      parseErrors.forEach(
-        err -> {
-          if (ParseStage.syntax.equals(err.stage())) {
-            println(err.msg());
-          }
-        }
-      );
-      println(String.format("Found %d errors", parseErrors.size()));
     }
   }
 

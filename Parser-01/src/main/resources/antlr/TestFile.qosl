@@ -2,14 +2,14 @@
 Test File for checking Qosl grammar.
 */
 
-q1block :: {
-    if &&q1(q1dk) {
-        q1 : {
+q1block : {
+    if (q1(q1dk)) {
+        q1:{
           qt """
           Here is multiline
           string that has embedded \"text\". dummy
-          """
-          S default q1dk: "Don't know"
+          """;
+          S default "Don't know";
         }
     }
 }
