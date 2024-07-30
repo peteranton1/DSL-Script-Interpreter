@@ -9,18 +9,18 @@ lexer grammar Qosl01Lexer;
 //}
 // LEXER
 
-CHARACTER  : 'c'|'C'|'character'|'CHARACTER';
-DECIMAL    : 'decimal'|'DECIMAL';
+CHARACTER  : 'char'|'CHAR'|'character'|'CHARACTER';
 DEFAULT    : 'default'|'DEFAULT';
+DATE       : 'date'|'DATE';
 ELSE       : 'else'|'ELSE';
 ELSEIF     : 'elseif'|'ELSEIF';
-FLOAT64    : 'float'|'float64';
 IF         : 'if'|'IF';
-INT64      : 'int'|'int64';
 LET        : 'let'|'LET';
 MULTIPLE   : 'm'|'M'|'multiple'|'MULTIPLE';
+NUMBER     : 'num'|'NUM'|'number'|'NUMBER';
 ON_ENTRY   : 'on_entry'|'ON_ENTRY';
 ON_EXIT    : 'on_exit'|'ON_EXIT';
+OPENEND    : 'open'|'OPEN'|'openend'|'OPENEND';
 PACKAGE    : 'package'|'PACKAGE';
 PERFORM    : 'perform'|'PERFORM';
 QTEXT      : 'qt'|'QT'|'qtext'|'QTEXT';
@@ -37,6 +37,7 @@ LBRACK     : '[';
 RBRACK     : ']';
 SEMI       : ';';
 COMMA      : ',';
+ELLIPSE    : '..';
 DOT        : '.';
 
 // 3.12 Operators

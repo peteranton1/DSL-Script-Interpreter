@@ -35,12 +35,19 @@ assignExpr
     ;
 
 kwdStmt
-    : kwdMain kwdSub* block
+    : kwdMain (MUL rangeExpr)? kwdSub* typeValue?
+    ;
+
+rangeExpr
+    : LPAREN rangeExpr RPAREN
+    | typeValue ((COMMA typeValue)* | (ELLIPSE typeValue)?)
     ;
 
 kwdMain
     : CHARACTER  // 'c'|'C'|'character'|'CHARACTER';
+    | DATE       // 'date';
     | MULTIPLE   // 'm'|'M'|'multiple'|'MULTIPLE';
+    | NUMBER     // 'number';
     | ON_ENTRY   // 'on_entry'|'ON_ENTRY';
     | ON_EXIT    // 'on_exit'|'ON_EXIT';
     | PACKAGE    // 'package'|'PACKAGE';
@@ -50,10 +57,10 @@ kwdMain
     ;
 
 kwdSub
-    : DECIMAL    // 'decimal'|'DECIMAL';
+    : NUMBER    // 'number';
     | DEFAULT    // 'default'|'DEFAULT';
-    | FLOAT64    // 'float'|'float64';
-    | INT64      // 'int'|'int64';
+    | OPENEND    // 'open'|'openend';
+    | DATE       // 'date';
     ;
 
 whileBlock
@@ -91,7 +98,10 @@ typeLit
     : IntegerLiteral
     | FloatingPointLiteral
     | BooleanLiteral
-    | StringLiteral
+    ;
+
+textLit
+    : StringLiteral
     | TextBlock
     | NullLiteral
     ;
@@ -105,11 +115,12 @@ expr
 
 typeValue
     : typeLit
+    | textLit
     | typeId
     ;
 
 parenExpr
-    : LPAREN expr RPAREN
+    : LPAREN (expr|rangeExpr) RPAREN
     ;
 
 unaryExp

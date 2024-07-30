@@ -5,11 +5,18 @@ Test File for checking Qosl grammar.
 q1block : {
     if (q1(q1dk)) {
         q1:{
+          qt "Please answer"
+          S default open "Other (Specify)"
+        }
+        q1a: num open "Enter number"
+        q1b: char*(20, 5, 30) "Enter Name"
+        q1c: date "Enter Date"
+        q2:{
           qt """
           Here is multiline
           string that has embedded \"text\". dummy
-          """;
-          S default "Don't know";
+          """
+          S "Continue"
         }
     }
 }
