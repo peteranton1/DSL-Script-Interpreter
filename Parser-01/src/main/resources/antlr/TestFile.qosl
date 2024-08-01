@@ -2,15 +2,15 @@
 Test File for checking Qosl grammar.
 */
 
-q1block : {
-    if (q1(q1dk)) {
+q1block(index) : page {
+    if q1(q1a .. q1dk) {
         q1:{
-          qt "Please answer"
+          qt "Please answer $index"
           S default open "Other (Specify)"
         }
-        q1a: num open "Enter number"
-        q1b: char*(20, 5, 30) "Enter Name"
-        q1c: date "Enter Date"
+        q1a: decimal "Enter number"
+        q1b: char (20, 5, 30) "Enter Name"
+        date q1c: "Enter Date (yyyy-mm-dd)"
         q2:{
           qt """
           Here is multiline
@@ -21,5 +21,10 @@ q1block : {
     }
 }
 
-perform q1block
+boolean isGood = true
+
+q1loop: while (1 .. 5, 6, 7) {
+    perform q1block(q1loop)
+}
+
 

@@ -23,48 +23,70 @@ stmt
     ;
 
 block
-    : LBRACE stmts RBRACE
+    : stmtsBlock
+    | pageBlock
     | kwdStmt
     | ifBlock
     | whileBlock
     | expr
     ;
 
+stmtsBlock
+    : LBRACE stmts RBRACE
+    ;
+
+pageBlock
+    : PAGE stmtsBlock
+    ;
+
 assignExpr
-    : typeId assignOp
+    : typeId rangeExpr? assignOp
     ;
 
 kwdStmt
-    : kwdMain (MUL rangeExpr)? kwdSub* typeValue?
-    ;
-
-rangeExpr
-    : LPAREN rangeExpr RPAREN
-    | typeValue ((COMMA typeValue)* | (ELLIPSE typeValue)?)
-    ;
-
-kwdMain
-    : CHARACTER  // 'c'|'C'|'character'|'CHARACTER';
-    | DATE       // 'date';
-    | MULTIPLE   // 'm'|'M'|'multiple'|'MULTIPLE';
-    | NUMBER     // 'number';
-    | ON_ENTRY   // 'on_entry'|'ON_ENTRY';
-    | ON_EXIT    // 'on_exit'|'ON_EXIT';
-    | PACKAGE    // 'package'|'PACKAGE';
-    | PERFORM    // 'perform'|'PERFORM';
-    | QTEXT      // 'qt'|'QT'|'qtext'|'QTEXT';
-    | SINGLE     // 's'|'S'|'single'|'SINGLE';
+    : CHARACTER rangeExpr kwdSub* textLit
+    | SINGLE    kwdSub* textLit
+    | MULTIPLE  kwdSub* textLit
+    | BOOLEAN   assignExpr expr
+    | DATE      assignExpr expr
+    | FLOAT     assignExpr expr
+    | INTEGER   assignExpr expr
+    | DECIMAL   rangeExpr? kwdSub* textLit
+    | ON_ENTRY  typeId  // 'on_entry'|'ON_ENTRY';
+    | ON_EXIT   typeId // 'on_exit'|'ON_EXIT';
+    | PACKAGE   typeId  // 'package'|'PACKAGE';
+    | PERFORM   typeIdList  // 'perform'|'PERFORM';
+    | QTEXT     textLit  // 'qt'|'QT'|'qtext'|'QTEXT';
     ;
 
 kwdSub
-    : NUMBER    // 'number';
-    | DEFAULT    // 'default'|'DEFAULT';
+    : DEFAULT    // 'default'|'DEFAULT';
     | OPENEND    // 'open'|'openend';
-    | DATE       // 'date';
+    ;
+
+typeIdList
+    : typeIdExpr (COMMA typeId)*
+    ;
+
+typeIdExpr
+    : typeId rangeExpr?
+    ;
+
+typeId
+    : Identifier
+    ;
+
+rangeExpr
+    : LPAREN typeValue rangeSubExpr* RPAREN
+    ;
+
+rangeSubExpr
+    : COMMA typeValue
+    | ELLIPSE typeValue
     ;
 
 whileBlock
-    : WHILE condition block
+    : WHILE rangeExpr block
     ;
 
 ifBlock
@@ -90,14 +112,10 @@ assignOp
     | ASSIGN   // '=';
     ;
 
-typeId
-    : Identifier parenExpr?
-    ;
-
 typeLit
     : IntegerLiteral
     | FloatingPointLiteral
-    | BooleanLiteral
+    | booleanLiteral
     ;
 
 textLit
@@ -111,6 +129,7 @@ expr
     | parenExpr
     | logicalExpr
     | typeValue
+    | rangeExpr
     ;
 
 typeValue
@@ -131,6 +150,8 @@ unaryOp
     : BANG     // '!';
     | SUB      // '-';
     ;
+
+booleanLiteral: TRUE | FALSE;
 
 logicalExpr
     : sumExpr (logicalOp sumExpr)*

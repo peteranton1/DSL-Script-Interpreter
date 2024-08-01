@@ -9,56 +9,63 @@ lexer grammar Qosl01Lexer;
 //}
 // LEXER
 
+BOOLEAN    : 'bool'|'BOOL'|'boolean'|'BOOLEAN';
 CHARACTER  : 'char'|'CHAR'|'character'|'CHARACTER';
-DEFAULT    : 'default'|'DEFAULT';
 DATE       : 'date'|'DATE';
+DECIMAL    : 'decimal'|'DECIMAL';
+DEFAULT    : 'default'|'DEFAULT';
 ELSE       : 'else'|'ELSE';
 ELSEIF     : 'elseif'|'ELSEIF';
+FALSE      : 'false'|'FALSE';
+FLOAT      : 'float'|'FLOAT';
+FOR        : 'for'|'FOR';
 IF         : 'if'|'IF';
-LET        : 'let'|'LET';
+INTEGER    : 'int'|'INT'|'integer'|'INTEGER';
 MULTIPLE   : 'm'|'M'|'multiple'|'MULTIPLE';
-NUMBER     : 'num'|'NUM'|'number'|'NUMBER';
+NULL       : 'null'|'NULL';
 ON_ENTRY   : 'on_entry'|'ON_ENTRY';
 ON_EXIT    : 'on_exit'|'ON_EXIT';
 OPENEND    : 'open'|'OPEN'|'openend'|'OPENEND';
 PACKAGE    : 'package'|'PACKAGE';
+PAGE       : 'page'|'PAGE';
 PERFORM    : 'perform'|'PERFORM';
 QTEXT      : 'qt'|'QT'|'qtext'|'QTEXT';
 SINGLE     : 's'|'S'|'single'|'SINGLE';
+TRUE       : 'true'|'TRUE';
 WHILE      : 'while'|'WHILE';
 
 // 3.11 Separators
 
-LPAREN     : '(';
-RPAREN     : ')';
-LBRACE     : '{';
-RBRACE     : '}';
-LBRACK     : '[';
-RBRACK     : ']';
-SEMI       : ';';
 COMMA      : ',';
-ELLIPSE    : '..';
 DOT        : '.';
+ELLIPSE    : '..';
+LBRACE     : '{';
+LBRACK     : '[';
+LPAREN     : '(';
+RBRACE     : '}';
+RBRACK     : ']';
+RPAREN     : ')';
+SEMI       : ';';
 
 // 3.12 Operators
 
+ADD      : '+';
+AND      : '&&';
 ASSIGN   : '=';
-GT       : '>';
-LT       : '<';
 BANG     : '!';
 COLON    : ':';
-EQUAL    : '==';
-LE       : '<=';
-GE       : '>=';
-NOTEQUAL : '!=';
-AND      : '&&';
-OR       : '||';
-INC      : '++';
 DEC      : '--';
-ADD      : '+';
-SUB      : '-';
-MUL      : '*';
 DIV      : '/';
+EQUAL    : '==';
+GE       : '>=';
+GT       : '>';
+INC      : '++';
+LE       : '<=';
+LT       : '<';
+MUL      : '*';
+NOTEQUAL : '!=';
+OR       : '||';
+SUB      : '-';
 
 // §3.10.6 Escape Sequences for Character and String Literals
 
@@ -81,7 +88,7 @@ fragment UnicodeEscape: '\\' 'u'+ HexDigit HexDigit HexDigit HexDigit;
 
 // §3.10.3 Boolean Literals
 
-BooleanLiteral: 'true' | 'false';
+//BooleanLiteral: TRUE | FALSE;
 
 // §3.10.5 String Literals
 
@@ -101,7 +108,7 @@ fragment MultiCharacter: ~["\\] | EscapeSequence ;
 
 // §3.10.7 The Null Literal
 
-NullLiteral: 'null';
+NullLiteral: NULL;
 
 // §3.10.1 Integer Literals
 
