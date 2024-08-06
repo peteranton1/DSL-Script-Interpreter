@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'antlr'
+    id 'idea'
+    id 'maven-publish'
+}
+
+group = 'org.example'
+version = '0.1.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antlr "org.antlr:antlr4:4.13.1"
+    implementation("org.antlr:antlr4-runtime:4.13.1")
+    implementation("org.apache.commons:commons-lang3:3.11")
+//    implementation("org.projectlombok:lombok:1.18.12")
+//
+//    annotationProcessor("org.projectlombok:lombok:1.18.12")
+    testCompileOnly "org.mockito:mockito-core:3.3.3"
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ["-visitor",
+                  "-long-messages",
+                  "-package", "org.example.antlr.qosl"]
+    outputDirectory = file("build/generated-src/antlr/main/org/example/antlr/qosl")
+}
