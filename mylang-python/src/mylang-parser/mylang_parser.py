@@ -23,6 +23,10 @@ with open('../../tests/example.mylang') as file:
 
 print(tokens)
 
+def parse_eol():
+    while tokens[0][0] == 'EOL':
+        tokens.pop(0)
+
 def parse_list_of_statements():
     statements = []
     while True:
@@ -40,7 +44,7 @@ def parse_program():
 def parse_statement():
     node = parse_print() or parse_assignment() or parse_if_else()
     if node:
-        assert tokens.pop(0)[0] == 'EOL'
+        parse_eol()
         return node
     return None
 
@@ -88,14 +92,14 @@ def parse_if_else():
     right = parse_expression()
     assert right is not None
 
-    assert tokens.pop(0)[0] == 'EOL'
+    parse_eol()
 
     true_statements = parse_list_of_statements()
 
     false_statements = None
     if tokens[0] == ('KWD', 'else'):
         tokens.pop(0)
-        assert tokens.pop(0)[0] == 'EOL'
+        parse_eol()
         false_statements = parse_list_of_statements()
 
     assert tokens.pop(0)[0] != ('KWD', 'end')

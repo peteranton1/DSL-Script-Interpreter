@@ -1,5 +1,6 @@
 print _Hello_World!
 print 123
+
 question <- _What's_your_favourite_number?
 favourite <- ask_int question
 print favourite
@@ -7,6 +8,7 @@ if favourite = 42
     print _Good_answer!
 else
     if favourite > 42
+
         print _That's_a_bit_much
     else
         print _The_only_way_is_up...
