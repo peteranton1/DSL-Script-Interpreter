@@ -22,3 +22,96 @@ with open('../../tests/example.mylang') as file:
     tokens.append(('EOF', None))
 
 print(tokens)
+
+def parse_list_of_statements():
+    statements = []
+    while True:
+        statement = parse_statement()
+        if not statement:
+            break
+        statements.append(statement)
+    return statements
+
+def parse_program():
+    statements = parse_list_of_statements()
+    assert tokens.pop(0)[0] == 'EOF'
+    return ('program', statements)
+
+def parse_statement():
+    node = parse_print() or parse_assignment() or parse_if_else()
+    if node:
+        assert tokens.pop(0)[0] == 'EOL'
+        return node
+    return None
+
+def parse_print():
+    if tokens[0] != ('KWD', 'print'):
+        return None
+    tokens.pop(0)
+    expr = parse_expression()
+    assert expr is not None
+    return ('print', expr)
+
+def parse_assignment():
+    if tokens[0][0] == 'VAR' and tokens[1][1] == '<-':
+        var = tokens.pop(0)
+        tokens.pop(0)
+        expr = parse_expression()
+        assert expr is not None
+        return ('assignment', var, expr)
+    return None
+
+def parse_expression():
+    if tokens[0][0] in {'STR', 'INT', 'VAR'}:
+        return tokens.pop(0)
+    return parse_ask_int()
+
+def parse_ask_int():
+    if tokens[0] != ('KWD', 'ask_int'):
+        return None
+    tokens.pop(0)
+    expr = parse_expression()
+    assert expr is not None
+    return ('ask_int', expr)
+
+def parse_if_else():
+    if tokens[0] != ('KWD', 'if'):
+        return None
+    tokens.pop(0)
+
+    left = parse_expression()
+    assert left is not None
+
+    operator = tokens.pop(0)
+    assert operator[0] == 'OPR'
+
+    right = parse_expression()
+    assert right is not None
+
+    assert tokens.pop(0)[0] == 'EOL'
+
+    true_statements = parse_list_of_statements()
+
+    false_statements = None
+    if tokens[0] == ('KWD', 'else'):
+        tokens.pop(0)
+        assert tokens.pop(0)[0] == 'EOL'
+        false_statements = parse_list_of_statements()
+
+    assert tokens.pop(0)[0] != ('KWD', 'end')
+
+    return ('if_else', left, operator, right, true_statements, false_statements)
+
+
+
+
+
+
+print(parse_program())
+
+# tree = ('Program', [
+#     ('Statement',
+#      ('Print', ('STR', 'Hello World!'))),
+#     ('Statement',
+#      ('Print', ('INT', 123))),
+# ])
